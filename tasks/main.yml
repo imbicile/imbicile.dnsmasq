@@ -1,0 +1,38 @@
+---
+# tasks file for imbicile.dnsmasq
+
+# prepare
+- name: config systemd-resolved
+  template:
+    src: resolved.conf.j2
+    dest: /etc/systemd/resolved.conf
+    mode: "0644"
+  notify: restart systemd-resolved
+
+- name: force systemd-resolved
+  meta: flush_handlers
+
+# install dnsmasq
+- name: install dnsmasq
+  apt:
+    name:
+      - dnsmasq
+      - dnsmasq-base
+      - dnsmasq-utils
+    state: present
+    update_cache: yes
+  notify: restart dnsmasq
+
+- name: config dnsmasq
+  template:
+    src: dnsmasq.conf.j2
+    dest: /etc/dnsmasq.conf
+    mode: "0644"
+  notify: restart dnsmasq
+
+# config resolv.conf
+- name: config resolv.conf
+  template:
+    src: resolv.conf.j2
+    dest: /etc/resolv.conf
+    mode: "0644"

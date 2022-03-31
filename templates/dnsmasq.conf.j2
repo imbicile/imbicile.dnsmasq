@@ -1,0 +1,28 @@
+{{ ansible_managed | comment }}
+
+port={{ dnsmasq_port }}
+
+all-servers
+strict-order
+no-poll
+log-queries
+cache-size={{ dnsmasq_cache }}
+clear-on-reload
+expand-hosts
+local-ttl=300
+
+{% for nameserver in dnsmasq_nameserver %}
+server={{ nameserver }}
+{% endfor %}
+
+# no-hosts                              # отключить файл hosts
+# addn-hosts=/etc/dnsmasq.hosts         # указать отдельный, можнно несколько
+# resolv-file=/etc/dnsmasq.conf.resolv  # указать файл серверов имён
+
+domain={{ dnsmasq_domain }}
+
+{% for item in dnsmasq_hosts %}
+address=/{{ item.hostname }}.{{ dnsmasq_domain }}/{{ item.ip }}
+{% set ptr = item.ip.split('.') %}
+ptr-record={{ ptr[3] }}.{{ ptr[2] }}.{{ ptr[1] }}.{{ ptr[0] }}.in-addr.arpa.,"{{ item.hostname }}.{{ dnsmasq_domain }}"
+{% endfor %}
