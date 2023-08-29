@@ -1,13 +1,14 @@
 ---
 # defaults file for imbicile.dnsmasq
 
-dnsmasq_addresses: "0.0.0.0"
 dnsmasq_port: "53"
 dnsmasq_domain: "may.local"
 dnsmasq_cache: "4096"
 
 dnsmasq_nameserver:
+  - "77.88.8.8"
   - "77.88.8.1"
+  - "8.8.8.8"
   - "8.8.4.4"
   - "1.1.1.1"
 
