@@ -5,18 +5,32 @@ port={{ dnsmasq_port }}
 all-servers
 strict-order
 no-poll
-log-queries
 cache-size={{ dnsmasq_cache }}
 clear-on-reload
 expand-hosts
 local-ttl=300
+neg-ttl=300
 
+domain-needed
+bogus-priv
+no-resolv
+
+# Debug
+#log-queries                            # лог вхождений
+#log-dhcp                               # лог DHCP
+#log-facility=/var/log/dnsmasq.log      # файл лога
+
+# Client DNS
+# server=/local.domain/192.168.0.1      # адрес 1 контроллра домена для пересылки
+# server=/local.domain/192.168.0.2      # адрес 2 контроллра домена для пересылки
+
+# Internet DNS
 {% for nameserver in dnsmasq_nameserver %}
 server={{ nameserver }}
 {% endfor %}
 
 # no-hosts                              # отключить файл hosts
-# addn-hosts=/etc/dnsmasq.hosts         # указать отдельный, можнно несколько
+# addn-hosts=/etc/dnsmasq.hosts         # указать отдельный hosts, можно несколько, возвращает так же ptr
 # resolv-file=/etc/dnsmasq.conf.resolv  # указать файл серверов имён
 
 domain={{ dnsmasq_domain }}
